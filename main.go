@@ -1,8 +1,10 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
+	"github.com/Mainzxq/go_article/utils"
 	"github.com/julienschmidt/httprouter"
+	"net/http"
 )
 
 
@@ -18,5 +20,6 @@ func RegisterHandlers() *httprouter.Router {
 
 func main() {
 	r := RegisterHandlers()
+	fmt.Println(utils.MakeUUIDS())
 	http.ListenAndServe(":8000", r)
 }

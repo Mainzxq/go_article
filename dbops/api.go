@@ -1,16 +1,18 @@
 package dbops
 
 import (
-	"api/defs"
 	"database/sql"
+	"github.com/Mainzxq/go_article/defs"
+	"github.com/Mainzxq/go_article/utils"
 	"log"
+	"time"
 )
 
 //  连接数据库
 
 
 // 创建用户
-func AdduserCredential(loginName string, pwd string) error {
+func AddUserCredential(loginName string, pwd string) error {
 	stmtIns,err := dbConn.Prepare("INSERT INTO users (login_name, pwd) VALUES(?, ?)")
 	if err != nil{
 		return err
@@ -68,4 +70,31 @@ func DeleteUser(loginName string, pwd string) error {
 func AddArticle(aid int, name string) (*defs.ArticleInfo, error) {
 	// create uuid
 
+	atid, err := utils.MakeUUIDS()
+	if err != nil {
+		return nil, err
+	}
+
+	t := time.Now()
+	ctime := t.Format("Jan 02 2006, 15:04:05")
+	stmtIns, err := dbConn.Prepare(`INSERT INTO article_info(id, author_id, name, display_time) VALUES(?, ?, ?, ?)`)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = stmtIns.Exec(atid, aid, name, ctime)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &defs.ArticleInfo{
+		Id:atid,
+		AuthorId: aid,
+		Name: name,
+		DisplayCtime: ctime,
+	}
+
+	defer dbConn.Close()
+
+	return res, nil
 }

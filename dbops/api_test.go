@@ -18,14 +18,14 @@ func TestMain(m *testing.M) {
 }
 
 func TestUserWorkFlow(t *testing.T) {
-	t.Run("Add", testAdduserCredential)
+	t.Run("Add", testAddUserCredential)
 	t.Run("Get", testGetUserCredential)
 	t.Run("delete", testDeleteUser)
 	t.Run("Reget", testRegetUser)
 }
 
-func testAdduserCredential(t *testing.T) {
-	err := AdduserCredential("mainzxq", "123")
+func testAddUserCredential(t *testing.T) {
+	err := AddUserCredential("mainzxq", "123")
 	if err != nil {
 		t.Errorf("Error of AddUser: %v", err)
 	}
