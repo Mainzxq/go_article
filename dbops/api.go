@@ -67,7 +67,7 @@ func DeleteUser(loginName string, pwd string) error {
 }
 
 
-func AddArticle(aid int, name string) (*defs.ArticleInfo, error) {
+func AddNewArticle(aid int, name string) (*defs.ArticleInfo, error) {
 	// create uuid
 
 	atid, err := utils.MakeUUIDS()
@@ -96,5 +96,55 @@ func AddArticle(aid int, name string) (*defs.ArticleInfo, error) {
 
 	defer dbConn.Close()
 
+	return res, nil
+}
+
+func DelArticle(atid string, aid int) error {
+	stmtDell, err := dbConn.Prepare("DELETE FROM article_info WHERE article_id=? AND aid=?" )
+	if err != nil {
+		log.Printf("DeleteUser error: %s", err)
+		return err
+	}
+
+	_, err = stmtDell.Exec(atid, aid)
+	if err != nil {
+		log.Printf("got an excutive error: %s", err)
+		return err
+	}
+	defer stmtDell.Close()
+	return nil
+}
+
+func GetAticlesByAid(aid int) ([]*defs.ArticleInfo, error) {
+	stmtGet, err := dbConn.Prepare("SELECT id, name, display_ctime, contents, title FROM article_info WHERE author_id=?")
+	if err != nil {
+		log.Printf("failed to connect to db: %s", err)
+		return _, err
+	}
+
+	var res []*defs.ArticleInfo
+	rows, err := stmtGet.Query(aid)
+	if err != nil {
+		return res, nil
+	}
+	
+	for rows.Next() {
+		var id, name, contents, title, display_ctime string
+		if err := rows.Scan(&id, &name, &display_ctime, &contents, &title); err != nil {
+			return res, err
+		}
+
+		c := &defs.ArticleInfo{
+			Id: id,
+			Name: name,
+			DisplayCtime: display_ctime,
+			Contents: contents,
+			Title: title,
+		}
+
+		res = append(res, c)
+	}
+
+	defer stmtGet.Close()
 	return res, nil
 }

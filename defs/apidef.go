@@ -14,4 +14,14 @@ type ArticleInfo struct {
 	AuthorId int
 	Name string
 	DisplayCtime string
+	Contents string
+	Title string
+}
+
+type Comment struct {
+	id string
+	ArticleId string
+	AuthorId int
+	content string
+	DisplayCtime string
 }
