@@ -1,18 +1,17 @@
 package dbops
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+	"context"
+	"github.com/mongodb/mongo-go-driver/mongo"
+	"log"
 )
-
-var (
-	dbConn *sql.DB
-	err error
-)
+var dbClient *mongo.Client
+var err error
 
 func init() {
-	dbConn, err = sql.Open("mysql", "root:abc123456@tcp(10.211.55.5:3306)/test?charset=utf8")
+	// 注意格式
+	dbClient, err = mongo.Connect(context.TODO(), "mongodb://mainzxq:mainzxq@10.211.55.5:27927")
 	if err != nil {
-		panic(err.Error())
+		log.Fatal(err)
 	}
 }

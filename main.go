@@ -14,6 +14,8 @@ func RegisterHandlers() *httprouter.Router {
 
 	router.POST("/user", CreateUser)
 
+	router.GET("/", DbConnectTest)
+
 	router.POST("/user/:user_name", Login)
 	return router
 }
