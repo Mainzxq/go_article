@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/Mainzxq/go_article/defs"
 	"github.com/Mainzxq/go_article/utils"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"time"
 )
@@ -146,5 +147,37 @@ func GetAticlesByAid(aid int) ([]*defs.ArticleInfo, error) {
 	}
 
 	defer stmtGet.Close()
+	return res, nil
+}
+
+func GetArticles(from int, to int,) ([]*defs.ArticleInfo, error) {
+	stmtOut, err := dbConn.Prepare("SELECT id, name, display_ctime, contents, title FROM article_info WHERE ctime < ? AND ctime >= ?")
+	if err != nil {
+		return _, err
+	}
+
+	var res []*defs.ArticleInfo
+	rows, err := stmtOut.Query(to, from)
+	if err != nil {
+		return res, err
+	}
+
+	for rows.Next() {
+		var id, name, display_ctime, contents, title string
+		if err := rows.Scan(&id, &name, &display_ctime, &contents, &title); err!=nil {
+			return  _, err
+		}
+
+		c := &defs.ArticleInfo{
+			Id: id,
+			Name: name,
+			DisplayCtime: display_ctime,
+			Contents: contents,
+			Title: title,
+		}
+		res = append(res, c)
+	}
+
+	defer stmtOut.Close()
 	return res, nil
 }
