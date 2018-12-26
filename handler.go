@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Mainzxq/go_article/dbops"
 	"github.com/Mainzxq/go_article/defs"
 	"github.com/julienschmidt/httprouter"
@@ -19,6 +20,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	}
 	res, err := dbops.CreateUser(newUser)
 	if err != nil {
+		fmt.Println("this is a handler error ")
 		log.Fatal(err)
 	}
 	var str = "create user success:"+strconv.FormatBool(res)

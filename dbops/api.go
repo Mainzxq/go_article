@@ -26,6 +26,8 @@ func CreateUser(newUser defs.UserCredential) (bool, error) {
 	res, err := collection.InsertOne(context.TODO(), newUser)
 	if err != nil {
 		log.Fatal(err)
+
+		fmt.Println("this is api error!")
 		return false, err
 	}
 	fmt.Println("Insert one doc by ID:", res.InsertedID)
