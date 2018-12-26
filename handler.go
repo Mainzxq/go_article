@@ -2,13 +2,27 @@ package main
 
 import (
 	"github.com/Mainzxq/go_article/dbops"
+	"github.com/Mainzxq/go_article/defs"
 	"github.com/julienschmidt/httprouter"
 	"io"
+	"log"
 	"net/http"
+	"strconv"
 )
 
 func CreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	io.WriteString(w, "create user handler")
+	un := p.ByName("user_name")
+	pwd := p.ByName("pwd")
+	var newUser = defs.UserCredential{
+		Username:un,
+		Pwd: pwd,
+	}
+	res, err := dbops.CreateUser(newUser)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var str = "create user success:"+strconv.FormatBool(res)
+	io.WriteString(w, str)
 }
 
 func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {

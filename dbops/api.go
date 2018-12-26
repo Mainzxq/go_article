@@ -2,7 +2,8 @@ package dbops
 
 import (
 	"context"
-	_ "github.com/go-sql-driver/mysql"
+	"fmt"
+	"github.com/Mainzxq/go_article/defs"
 	"log"
 )
 
@@ -19,6 +20,17 @@ func TestDbConnet() string {
 	return "DB connected!"
 }
 
+
+func CreateUser(newUser defs.UserCredential) (bool, error) {
+	collection := dbClient.Database("mainzxq").Collection("user_info")
+	res, err := collection.InsertOne(context.TODO(), newUser)
+	if err != nil {
+		log.Fatal(err)
+		return false, err
+	}
+	fmt.Println("Insert one doc by ID:", res.InsertedID)
+	return true, nil
+}
 //// 创建用户
 //func AddUserCredential(loginName string, pwd string) error {
 //	stmtIns,err := dbConn.Prepare("INSERT INTO users (login_name, pwd) VALUES(?, ?)")
