@@ -5,6 +5,9 @@ type UserCredential struct {
 	// 反点代表tag，解析时会自动转换json
 	Username string `json:"user_name"`
 	Pwd string `json:"pwd"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+	Token string `json:"token"`
 }
 
 // data model

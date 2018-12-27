@@ -7,12 +7,14 @@ import (
 	"net/http"
 )
 
-
+type middleWrerHandler struct {
+	r *mux.Router
+}
 
 func RegisterHandlers() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", DbConnectTest).Methods("GET")
-
+	r.HandleFunc("/user/{user_name}", CreateUser).Methods("POST")
 
 
 	//router := httprouter.New()
