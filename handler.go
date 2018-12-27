@@ -32,7 +32,8 @@ func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {
 	io.WriteString(w, "user was Created!: "+uname)
 }
 
-func DbConnectTest(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func DbConnectTest(w http.ResponseWriter, r *http.Request) {
 	feedback_words := dbops.TestDbConnet()
+	w.WriteHeader(http.StatusOK)
 	io.WriteString(w, feedback_words)
 }
