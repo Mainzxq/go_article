@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Mainzxq/go_article/defs"
+	"github.com/mongodb/mongo-go-driver/bson"
 	"log"
 )
 
@@ -15,23 +16,33 @@ func TestDbConnet() string {
 	err = dbClient.Ping(context.TODO(), nil)
 	if err != nil {
 		log.Fatal(err)
-		return "Not good, Ops!"
+		return "DB feels Not good, Ops!"
 	}
 	return "DB connected!"
 }
 
 
-func CreateUser(newUser defs.UserCredential) (bool, error) {
+func CreateUser(newUser defs.UserCredential) (defs.UserCredential, error) {
 	collection := dbClient.Database("mainzxq").Collection("user_info")
 	res, err := collection.InsertOne(context.TODO(), newUser)
 	if err != nil {
 		log.Fatal(err)
-
 		fmt.Println("this is api error!")
-		return false, err
 	}
 	fmt.Println("Insert one doc by ID:", res.InsertedID)
-	return true, nil
+	return newUser, nil
+}
+
+
+func GetOneUser(un string, pwd string) (defs.UserCredential, error) {
+	var result defs.UserCredential
+	collection := dbClient.Database("mainzxq").Collection("user_info")
+	err := collection.FindOne(context.TODO(),bson.D{{"user_name",un},{"pwd",pwd}}).Decode(&result)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(result)
+	return result, nil
 }
 //// 创建用户
 //func AddUserCredential(loginName string, pwd string) error {

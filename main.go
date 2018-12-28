@@ -14,7 +14,7 @@ type middleWrerHandler struct {
 func RegisterHandlers() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/", DbConnectTest).Methods("GET")
-	r.HandleFunc("/user/{user_name}", CreateUser).Methods("POST")
+	r.HandleFunc("/user/create", CreateUser).Methods("POST")
 
 
 	//router := httprouter.New()
