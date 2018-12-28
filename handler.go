@@ -51,7 +51,6 @@ func ParseOneToken(token string) (string, error) {
 	}
 	if token1.Valid {
 		fmt.Println(token1)
-
 		buf, err := json.Marshal(token1)
 		if err != nil {
 			log.Fatal(err)
@@ -110,10 +109,8 @@ func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {
 }
 
 func DbConnectTest(w http.ResponseWriter, r *http.Request) {
-	tk,_ := GetOneToken()
-	fmt.Println(ParseOneToken(tk))
-	fmt.Println(tk)
-	feedback_words := dbops.TestDbConnet()
+	fmt.Println(r.RemoteAddr)
+	feedbackWords := dbops.TestDbConnet()
 	w.WriteHeader(http.StatusOK)
-	io.WriteString(w, feedback_words)
+	io.WriteString(w, feedbackWords)
 }

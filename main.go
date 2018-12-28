@@ -3,29 +3,34 @@ package main
 import (
 	"fmt"
 	"github.com/Mainzxq/go_article/utils"
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
-type middleWrerHandler struct {
-	r *mux.Router
+
+func AuthMiddleWareHandler(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	// do some middleware things before.
+	fmt.Println("good, middleware is up")
+	next(w, r)
 }
 
+
 func RegisterHandlers() *mux.Router {
-	r := mux.NewRouter()
-	r.HandleFunc("/", DbConnectTest).Methods("GET")
-	r.HandleFunc("/user/create", CreateUser).Methods("POST")
+	basicRouter := mux.NewRouter().StrictSlash(true)
+	basicRouter.HandleFunc("/", DbConnectTest).Methods("GET")
+	basicRouter.HandleFunc("/user/create", CreateUser).Methods("POST")
 
 
-	//router := httprouter.New()
-	//router.POST("/user/:user_name/:pwd", CreateUser)
-	//router.GET("/", DbConnectTest)
-	//router.POST("/user/:user_name", Login)
-	return r
+
+	return basicRouter
 }
 
 func main() {
 	r := RegisterHandlers()
+	n := negroni.New()
+	n.Use(negroni.HandlerFunc(AuthMiddleWareHandler))
+	n.UseHandler(r)
 	fmt.Println(utils.MakeUUIDS())
-	http.ListenAndServe(":8000", r)
+	n.Run(":8000")
 }
