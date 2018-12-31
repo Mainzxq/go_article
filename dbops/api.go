@@ -34,15 +34,27 @@ func CreateUser(newUser defs.UserCredential) (defs.UserCredential, error) {
 }
 
 
-func GetOneUser(un string, pwd string) (defs.UserCredential, error) {
+func GetOneUserById(uid string) (defs.UserCredential, error) {
 	var result defs.UserCredential
 	collection := dbClient.Database("mainzxq").Collection("user_info")
-	err := collection.FindOne(context.TODO(),bson.D{{"user_name",un},{"pwd",pwd}}).Decode(&result)
+	err := collection.FindOne(context.TODO(),bson.D{{"_id",uid}}).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(result)
 	return result, nil
+}
+
+func GetUsersListByDepId(depid string) ([]defs.UserCredential, error) {
+	var res []defs.UserCredential
+	fmt.Println("something to do")
+	return res, nil
+}
+
+func GetUsersListByAge(from, to int) ([]defs.UserCredential, error) {
+	var res []defs.UserCredential
+	fmt.Println("something to do")
+	return res, nil
 }
 //// 创建用户
 //func AddUserCredential(loginName string, pwd string) error {

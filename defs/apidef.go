@@ -5,6 +5,7 @@ import "github.com/dgrijalva/jwt-go"
 // requests
 type UserCredential struct {
 	// 反点代表tag，解析时会自动转换json
+	UID string `json:"uid"`
 	Username string `json:"user_name"`
 	Pwd string `json:"pwd"`
 	Email string `json:"email"`

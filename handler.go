@@ -75,6 +75,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var newUser = defs.UserCredential{
+		UID: req["uid"].(string),
 		Username: req["user_name"].(string),
 		Pwd: req["pwd"].(string),
 		Email: req["email"].(string),
