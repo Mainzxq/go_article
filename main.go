@@ -12,6 +12,7 @@ import (
 func AuthMiddleWareHandler(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	// do some middleware things before.
 	fmt.Println("good, middleware is up")
+	fmt.Println("yes")
 	next(w, r)
 }
 
